@@ -1,0 +1,11 @@
+.git
+.venv
+venv/
+__pycache__/
+.env
+*.pyc
+docs/
+tests/
+README.md
+.idea/
+.vscode/
