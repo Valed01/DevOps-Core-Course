@@ -79,7 +79,7 @@ jobs:
       - uses: docker/build-push-action@v7
         with:
           context: app_python 
-          push: github.event_name != 'pull_request'
+          push: ${{ github.event_name == 'push' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
