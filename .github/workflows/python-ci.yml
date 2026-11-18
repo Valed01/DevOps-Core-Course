@@ -76,7 +76,7 @@ jobs:
             type=semver,pattern={{version}}
             type=sha,prefix=git-
 
-      - uses: docker/build-push-action@___
+      - uses: docker/build-push-action@v7
         with:
           context: app_python 
           push: github.event_name != 'pull_request'
