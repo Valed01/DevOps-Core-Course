@@ -3,7 +3,7 @@ import logging
 import os
 import platform
 import socket
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 # Third-party
 import uvicorn
@@ -22,7 +22,7 @@ app = FastAPI()
 
 # env
 host = os.getenv("HOST", "0.0.0.0")
-port = int(os.getenv("PORT", 5000))
+port = int(os.getenv("PORT", "5000"))
 debug = os.getenv("DEBUG", "False").lower() == "true"
 
 # service
@@ -37,11 +37,11 @@ cpu_count = os.cpu_count()
 python_version = platform.python_version()
 
 # runtime
-START_TIME = datetime.now(timezone.utc)
+START_TIME = datetime.now(UTC)
 
 
 def get_uptime():
-    delta = datetime.now(timezone.utc) - START_TIME
+    delta = datetime.now(UTC) - START_TIME
     seconds = int(delta.total_seconds())
     hours = seconds // 3600
     minutes = (seconds % 3600) // 60
@@ -70,7 +70,7 @@ def error_body(request: Request, error: str, message: str) -> dict:
         "error": error,
         "message": message,
         "path": request.url.path,
-        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "timestamp": datetime.now(UTC).isoformat(),
     }
 
 
@@ -119,7 +119,7 @@ async def root(request: Request):
         "runtime": {
             "uptime_seconds": uptime["seconds"],
             "uptime_human": uptime["human"],
-            "current_time": datetime.now(timezone.utc).isoformat(),
+            "current_time": datetime.now(UTC).isoformat(),
             "timezone": "UTC",
         },
         "request": {
@@ -138,8 +138,8 @@ async def health(response: Response):
     uptime = get_uptime()
     response.status_code = status.HTTP_200_OK
     return {
-        "status": "OK",
-        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "status": "healthy",
+        "timestamp": datetime.now(UTC).isoformat(),
         "uptime_seconds": uptime["seconds"]
     }
 
